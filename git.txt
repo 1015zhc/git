@@ -1,0 +1,121 @@
+﻿一、Git的使用
+
+		1. 准备一个本地目录，将这个目录作为本地的git仓库
+		2. 将一个普通目录变为git仓库
+					git init
+					
+			所有的git命令，都需要打开git bash创建进行执行！
+			
+		3. 涉及到团队协同开发，我们需要为本地仓库设置一个用户
+
+			命令					含义
+			git config --global user.name xxx	设置git用户名
+			git config --global user.email xxx	设置git邮箱
+			git init				初始化本地库
+			git config core.autocrlf false		取消换行符转换的warning提醒
+		查看用户名和邮箱地址：
+
+			$ git config user.name
+
+			$ git config user.email
+
+		修改用户名和邮箱地址：
+
+			$ git config --global user.name "username"
+
+			$ git config --global user.email "email"
+
+				
+二、git仓库的三区
+
+		工作区：  在操作系统上可以看到的，当前编辑文件的目录
+		暂存区：  负责临时存储工作区即将要提交到本地库文件的区域！
+		本地库：  存在在.git目录中的一个隐藏区域，负责记录历史版本
+					
+			
+		使用git，需要遵循以下原则，工作区的所有修改，都要提交到本地库！
+		
+		git status : 查看git仓库的状态！
+					nothing to commit, working tree clean代表工作区新写入的操作已经被存储到本地库了！
+		
+		git add  文件名 : 从工作区提交文件到暂存区
+		git rm --cached 文件名： 从暂存区移除文件！
+		git commit 文件名： 从暂存区提交文件到本地库
+		git checkout -- 文件： 从本地库检出当前最新版本，覆盖工作区
+		
+		如果文件已经提交到本地库，那么删除操作，也是需要将操作进行提交才可以！
+		
+三、版本回退
+
+		git会将每次提交的结果都进行保存！
+		rm 文件：删除工作区文件
+		git add/rm 文件： 更新此次操作
+		
+		git log : 完整格式查看本地库保存的版本！
+		git log --pretty=oneline: 以单行模式查看本地库保存的版本
+		git reflog :  查看所有的操作的记录
+		
+		回退或穿越：  git reset --hard xxxxxx
+		
+四、分支管理
+
+			分支为了同一个产品，多个功能同时开发期间，互不影响！
+			
+			git branch -v :查看分支
+			git branch 分支名： 新建分支（拥有和当前分支一样的所有状态）
+			git branch -d 分支名：删除分支
+			git checkout 分支名： 切换分支
+			git merge 分支名： 在当前分支合并指定分支
+			git checkout -b 分支名： 新建并切换分支
+			
+			处理冲突：  ①将特殊符号删除
+						②和团队协商冲突代码如何处理
+						③提交处理后的结果
+								git commit -m "xxx" 不加文件名
+								
+五、使用Github
+
+			配置本地和远程仓库SSH无密连接：
+					①在本地生成一对密钥：公钥（可与公开给别人）和私钥（存放在本地）
+							ssh-keygen -t rsa -C [用户名]
+					③本地在发送数据时，拿私钥加密，发送给别人，别人使用公钥解密
+					③别人向本地发送数据时，使用公钥加密，到本地使用私钥解密
+					
+六、使用Github进行协作
+
+			①两个概念： 本地库，远程库（属于每个不同的用户）
+			
+			本地和远程协作：   ①将本地仓库推送到远程仓库
+									git remote 变量名 远程仓库地址
+									git push -u(首次) 远程仓库变量名  远程仓库的分支名
+							   ②对比本地库和远程库
+									git fetch 远程库地址（远程库变量名）
+									git status :查看fetch后对比的状态
+									
+									合并： git merge  '远程库/远程库分支'
+									
+							   ③在本地库直接拉取远程库最新的状态
+									git pull 远程库地址
+									
+									git pull = git fetch+git merge
+									
+								④遇到冲突
+										a) 先git pull 拉取远程最新的内容
+										b) 在本地处理冲突
+										c) 再git push 推送最新修改到远程仓库
+		
+			人与人之间的合作：  ①只要在github上的仓库是一个公开的仓库，任何用户都可以通过搜索进行仓库的查询
+								②查到感兴趣的仓库，可以通过下载到本地或者是克隆的方式
+										git clone 仓库的url
+										
+								③通常用户只能向自己的仓库提交修改，邀请朋友加入协作开发
+										仓库---settings---Collaborators--邀请
+										
+										朋友接受邀请后，可以向你的仓库进行提交修改！
+										
+								④如果对某个仓库没用修改权限的，可以通过fork按钮，将仓库fork到自己的账户中！
+									将修改提交到自己本地fork的仓库中！
+									
+								⑤可以向元仓库的作者提交拉取请求（pull request）
+								
+								⑥原作者在审核代码后，可以选择merge pull request 将其他人的修改，进行合并
