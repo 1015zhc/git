@@ -37,6 +37,8 @@
 		
 		git status : 查看git仓库的状态！
 					nothing to commit, working tree clean代表工作区新写入的操作已经被存储到本地库了！
+		无法使用 add添加含中午的文件，git默认是不能识别中文的。需要在终端修改能识别中文。
+		git config --global core.quotepath false 修改之后就可以进行add等操作了。
 		
 		git add  文件名 : 从工作区提交文件到暂存区
 		git rm --cached 文件名： 从暂存区移除文件！
